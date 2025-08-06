@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+*.env
+
+# Django
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static_root/
+local_settings.py
+
+# VS Code and IDEs
+.vscode/
+.idea/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Pytest
+htmlcov/
+.coverage
+.tox/
+.pytest_cache/
+
+# Migrations (optional: only if you want to ignore initial migrations)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+
+# Others (optional)
+*.pem
+*.crt
+*.key
