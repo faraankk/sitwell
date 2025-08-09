@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,16 +27,29 @@
     <main>
         <div class="otp-container">
             <h2>Enter the OTP</h2>
-            <p>The OTP has sent to your registered email</p>
-            <div class="otp-input">
-                <input type="text" placeholder="Enter the otp" id="otp" name="otp">
-                <span id="timer">0:57 seconds remaining</span>
-                <button class="resend-otp">Resend OTP</button>
-            </div>
-            <div class="buttons">
-                <button class="go-back">Go back</button>
-                <button class="verify">Verify</button>
-            </div>
+            <p>The OTP has been sent to your registered email</p>
+
+            <!-- Django messages -->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form method="post" action="{% url 'verify_otp_signup' %}">
+                {% csrf_token %}
+                <div class="otp-input">
+                    <input type="text" placeholder="Enter the OTP" id="otp" name="otp" required>
+                    <span id="timer">2:00 seconds remaining</span>
+                    <button class="resend-otp" type="button" onclick="resendOTP()">Resend OTP</button>
+                </div>
+                <div class="buttons">
+                    <button class="go-back" type="button" onclick="goBack()">Go back</button>
+                    <button class="verify" type="submit">Verify</button>
+                </div>
+            </form>
         </div>
     </main>
 
@@ -87,14 +99,29 @@
         </div>
         <p class="copyright">© Copyright Rimek 2022. All right reserved</p>
     </footer>
+
+    <script>
+        // Countdown Timer for OTP
+        let secs = 120;  // 2 minutes
+        const timerEl = document.getElementById('timer');
+        const interval = setInterval(() => {
+            secs--;
+            timerEl.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')} seconds remaining`;
+            if (secs <= 0) {
+                clearInterval(interval);
+                timerEl.textContent = "OTP has expired";
+            }
+        }, 1000);
+
+        // Resend OTP - redirects with user_id
+        function resendOTP() {
+            window.location.href = '{% url "verify_otp_signup" %}?resend={{ request.session.otp_user_id }}';
+        }
+
+        // Go back
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
-<script>
-    let secs = 120;  // OTP is valid for 2 minutes
-    const timerEl = document.getElementById('timer');
-    const interval = setInterval(() => {
-        secs--;
-        timerEl.textContent = `${secs} seconds remaining`;
-        if (secs <= 0) clearInterval(interval);
-    }, 1000);
-</script>
 </html>

@@ -4,7 +4,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 def generate_otp():
-    return ''.join(random.choices(string.digits, k=6))
+    otp = ''.join(random.choices(string.digits, k=6))
+    print(f"Generated OTP: {otp}")  # Debugging output
+    return otp
 
 def send_otp_email(email, otp):
     subject = "Sit Well – Your One-Time Password"
